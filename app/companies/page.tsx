@@ -1,17 +1,17 @@
 'use client'
 import { mockCompanies } from '@/lib/data'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react' 
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
-export default function DiscoverPage() {
+
+function DiscoverContent() {
   const searchParams = useSearchParams()
   
   const [searchTerm, setSearchTerm] = useState('')
   const [filterSector, setFilterSector] = useState('All')
   const [mounted, setMounted] = useState(false) 
 
-  
   useEffect(() => {
     setMounted(true)
     const urlSearch = searchParams.get('search')
@@ -45,7 +45,6 @@ export default function DiscoverPage() {
     alert("Search filters saved! Check your Saved Searches page.")
   }
 
-  
   if (!mounted) return null
 
   return (
@@ -79,7 +78,7 @@ export default function DiscoverPage() {
             onClick={handleSaveSearch}
             className="bg-indigo-50 text-indigo-700 px-5 py-2 rounded-xl font-bold hover:bg-indigo-100 transition-all border border-indigo-100 flex items-center gap-2"
           >
-            <span></span> Save Search
+            Save Search
           </button>
         </div>
       </div>
@@ -115,10 +114,18 @@ export default function DiscoverPage() {
         </table>
       </div>
 
-      
       <div className="mt-6 text-sm text-slate-400 italic">
         Showing {filteredCompanies.length} startups.
       </div>
     </div>
+  )
+}
+
+
+export default function DiscoverPage() {
+  return (
+    <Suspense fallback={<div className="p-10 text-slate-500">Loading interface...</div>}>
+      <DiscoverContent />
+    </Suspense>
   )
 }
